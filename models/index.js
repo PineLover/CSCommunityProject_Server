@@ -38,5 +38,6 @@ db.Sequelize = Sequelize;
 db와 연결 파트
 */
 db.Person = require('./person')(sequelize, Sequelize)
+db.FrontQABoard = require('./frontQABoard')(sequelize, Sequelize)
 
 module.exports = db;
