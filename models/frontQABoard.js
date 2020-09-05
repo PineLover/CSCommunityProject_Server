@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
 		contents: {
 			type: DataTypes.TEXT,
 			allowNull: false,
+		},
+		page: {
+			type: DataTypes.INTEGER.UNSIGNED,
+			allowNull: false,
 		}
 	},
 	{

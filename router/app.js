@@ -105,7 +105,9 @@ app.post('/frontQABoard/create', function(req,res){
 	var writer = req.body.writer
 	var title = req.body.title
 	var contents = req.body.contents
+	/*should cal viewCnt and page in this server*/
 	var viewCnt = 0;
+	var page = 1;
 
 	console.log("/frontQABoard/create called")
 	const {FrontQABoard} = require('../models')
@@ -122,6 +124,31 @@ app.post('/frontQABoard/create', function(req,res){
 	.catch(err => {
 		console.log(err)
 	})	
+})
+
+
+/*
+	{
+		"page": "1"
+	}
+*/
+//list의 일부를 페이지 별로 받고 저장해야 되네. 디비 구조를 다시 만들자.
+app.post('/frontQABoard/getList',function(req,res){
+	console.log('request accepted')
+	var page = req.body.page
+
+	FrontQABoard.findAll({
+		where: {
+			page: page
+		}
+	})
+	.then( result => {
+		console.log(result)
+		res.json(result)
+	})
+	.catch(err => {
+		console.log(err)
+	})
 })
 
 
