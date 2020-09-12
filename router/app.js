@@ -19,18 +19,15 @@ var sequelize = require('../models/index').sequelize
 sequelize.sync()
 
 
-app.get('/createId', function(req,res) {
+app.post('/createId', function(req,res) {
 	console.log('createId req')
 	const {Person} = require('../models')
-	/*req
-
-	*/
-	var id = 1
-	var name = "김동환"
-	var age = 27
-	//tmp
-	var email = "asdf3@naver.com"
-	var pwd = "1234"
+	
+	var id = req.body.id
+	var name = req.body.name
+	var age = req.body.age
+	var email = req.body.email
+	var pwd = req.body.pwd
 
 	Person.findOne({
 		where: {
@@ -47,24 +44,27 @@ app.get('/createId', function(req,res) {
 				pwd: pwd
 			})
 			.then( result => {
-				res.json({"success": "true"})
+				res.json({"success": true})
 			})
 			.catch(err => {
 				console.log(err)
 			})			
 		} else {
 			console.log("email already exists")
-			res.json({"success": "false"})
+			res.json({"success": false})
 		}
 	})
 	.catch(err => {
+		res.json({"success": false})
 		console.log(err)
 	})
 })
 
-app.get('/login', function(req,res){
+app.post('/login', function(req,res){
 	console.log("login called")
 	const {Person} = require('../models')
+	var email = req.body.email
+	var pwd = req.body.pwd
 	//tmp
 	var email = "asdf2@naver.com"
 	var pwd = "1234"
@@ -78,12 +78,13 @@ app.get('/login', function(req,res){
 	})
 	.then( result => {
 		if (result === null) {
-			res.json({"success": "false"})
+			res.json({"success": false})
 		} else {
-			res.json({"success": "true"})
+			res.json({"success": true})
 		}
 	})
 	.catch(err => {
+		res.json({"success": false})
 		console.log(err)
 	})
 });
@@ -120,9 +121,10 @@ app.post('/frontQABoard/create', function(req,res){
 		page: page
 	})
 	.then( result => {
-		res.json({"success": "true"})
+		res.json({"success": true})
 	})
 	.catch(err => {
+		res.json({"success": false})
 		console.log(err)
 	})	
 })
@@ -149,6 +151,7 @@ app.post('/frontQABoard/getList',function(req,res){
 		res.json(result)
 	})
 	.catch(err => {
+		res.json({"success": false})
 		console.log(err)
 	})
 })
