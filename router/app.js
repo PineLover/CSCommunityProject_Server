@@ -8,13 +8,13 @@ app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
-var listener = app.listen(3000, function() {
+var listener = app.listen(3001, function() {
 	console.log("start!, express server on port %d", listener.address().port);
 });
 
 
 /*sequelize\app.js*/
-console.log("sequelize start")
+console.log("sequelize start2");
 var sequelize = require('../models/index').sequelize
 sequelize.sync()
 
