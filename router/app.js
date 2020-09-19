@@ -8,6 +8,13 @@ app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
+
+//router setting
+var jsonwebtokenRouter = require('../login/jsonwebtoken')
+app.use('/authorize',jsonwebtokenRouter);
+
+
+
 var listener = app.listen(3001, function() {
 	console.log("start!, express server on port %d", listener.address().port);
 });
@@ -60,16 +67,30 @@ app.post('/createId', function(req,res) {
 	})
 })
 
+//token creation
+var jwt = require('jsonwebtoken')
+var private_jwtKey = '1234'
+console.log(token)
+
+//give token to app, when returned then verify and proceed
+app.use( jwtVerify);
+app.get('/jwtVerifyTest', function(req, res) {
+	res.send(jwt.verify(token,private_jwtKey));
+});
+
 app.post('/login', function(req,res){
 	console.log("login called")
 	const {Person} = require('../models')
 	var email = req.body.email
 	var pwd = req.body.pwd
-	//tmp
+	//testing
 	var email = "asdf2@naver.com"
 	var pwd = "1234"
 	//find by id, pwd -> return true
 	
+	//make token by pwd and email and return
+	var token = jwt.sign({ sub: 'awsServer', exp: Math.floor(Date.now() / 1000) + 600 }, pwd);
+
 	Person.findOne({
 		where: {
 			email: email,
@@ -81,6 +102,7 @@ app.post('/login', function(req,res){
 			res.json({"success": false})
 		} else {
 			res.json({"success": true})
+			res.json({"token": token})
 		}
 	})
 	.catch(err => {
@@ -155,35 +177,5 @@ app.post('/frontQABoard/getList',function(req,res){
 		console.log(err)
 	})
 })
-
-//token creation
-var jwt = require('jsonwebtoken')
-var private_jwtKey = '1234'
-var token = jwt.sign({ sub: 'sjk5766', exp: Math.floor(Date.now() / 1000) + 600 }, private_jwtKey);
-console.log(token)
-//give token to app, when returned then verify and proceed
-
-var jwtVerify = function (req, res, next) {
-	//verify 실패시 error
-	try {
-		var decoded_data = jwt.verify(token,private_jwtKey);
-		console.log("in jwtVerify")
-		console.log(decoded_data.sub)
-		next();
-	} catch {
-		res.send('token is invalid');
-	}
-};
-
-
-app.use( jwtVerify);
-app.get('/jwtVerifyTest', function(req, res) {
-	res.send(jwt.verify(token,private_jwtKey));
-});
-
-
-
-
-
 
 
