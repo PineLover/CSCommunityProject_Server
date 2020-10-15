@@ -1,11 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('person', {
-		id: {
-			type: DataTypes.INTEGER.UNSIGNED,
-			allowNull: false,
-			primaryKey: true,
-		},
-		name: {
+		email: {
 			type: DataTypes.STRING(20),
 			allowNull: false,
 			unique: true,
@@ -14,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER.UNSIGNED,
 			allowNull: false,
 		},
-		email: {
+		name: {
 			type: DataTypes.STRING(20),
 			allowNull: false,
 		},
